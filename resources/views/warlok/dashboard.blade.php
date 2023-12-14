@@ -38,7 +38,7 @@
                         Kamu telah berlangganan pada <b> {{ $langganan }} </b>
                     </div>
                 @endif
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-xl-3 col-lg-6">
                         <div class="card card-stats mb-4 mb-xl-0">
                             <div class="card-body">
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <center>
                     <div id='map' style='width: 900px; height: 500px;'></div>
                     <script>

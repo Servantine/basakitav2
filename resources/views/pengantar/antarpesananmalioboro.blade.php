@@ -98,7 +98,7 @@
                                         @if ($u->status == 'Ditolak' || $u->status == 'Diantarkan') disabled @endif method="POST"> Tolak
                                     </button> </a>
                                     <a href="/selesaitransaksi2/{{ $u->id }}"> <button class="btn btn-info" onclick="return confirm('Apakah Anda Yakin?')"
-                                        @if ($u->status == 'Diselesaikan' || $u->status == 'Ditolak') disabled @endif method="POST"> Selesai
+                                        @if ($u->status == 'Diselesaikan' || $u->status == 'Ditolak' || $u->status == 'Menunggu'|| $u->status == 'Dibayar' ) disabled @endif method="POST"> Selesai
                                     </button> </a>
 
                                 </td>

@@ -130,10 +130,14 @@ class PageController extends Controller
         $transaksi->status = "Belum Dibayar";
         $transaksi->save();
 
+        $nama = Auth::user()->name;
         $langganan = Auth::user()->langganan;
+        $bank = Bank::where('nama_pemilik', $nama)->first();
+        $jumlahsampah = $bank->jumlah_sampah;
+        $kapasitassampah = $bank->kapasitas_sampah;
         $transaksis = Transaksis::where('tujuan_bank', $langganan)->paginate(5);
         // return dd($mhs);
-        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis, 'jumlah_sampah' => $jumlahsampah , 'kapasitas_sampah' => $kapasitassampah]);
     }
     public function lakukanpembayaran($id, Request $request)
     {
@@ -159,10 +163,14 @@ class PageController extends Controller
         $transaksi->status = "Ditolak";
         $transaksi->save();
 
+        $nama = Auth::user()->name;
         $langganan = Auth::user()->langganan;
+        $bank = Bank::where('nama_pemilik', $nama)->first();
+        $jumlahsampah = $bank->jumlah_sampah;
+        $kapasitassampah = $bank->kapasitas_sampah;
         $transaksis = Transaksis::where('tujuan_bank', $langganan)->paginate(5);
         // return dd($mhs);
-        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis, 'jumlah_sampah' => $jumlahsampah , 'kapasitas_sampah' => $kapasitassampah]);
     }
     public function selesaitransaksi($id, Request $request)
     {
@@ -170,7 +178,11 @@ class PageController extends Controller
         $transaksi->status = "Diselesaikan";
         $transaksi->save();
 
+        $nama = Auth::user()->name;
         $langganan = Auth::user()->langganan;
+        $bank = Bank::where('nama_pemilik', $nama)->first();
+        $jumlahsampah = $bank->jumlah_sampah;
+        $kapasitassampah = $bank->kapasitas_sampah;
         $transaksis = Transaksis::where('tujuan_bank', $langganan)->paginate(5);
         if ($transaksi) {
             $namabank = $transaksi->tujuan_bank;
@@ -189,7 +201,7 @@ class PageController extends Controller
             $bank->save();
         }
 
-        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis, 'jumlah_sampah' => $jumlahsampah , 'kapasitas_sampah' => $kapasitassampah]);
     }
 
     function kelolakendaraan()

@@ -123,6 +123,14 @@
 
                 <!-- Tombol untuk mengunggah bukti pembayaran -->
 
+                <center>
+                    <h3> Total Tagihan belum dibayar </h3>
+                    <div class="alert alert-danger" role="alert">
+                         <h4>  {{ $u->tagihan }} </h4>
+                     </div>
+                    
+                    
+                </center>
             </div>
         </div>
     </div>
