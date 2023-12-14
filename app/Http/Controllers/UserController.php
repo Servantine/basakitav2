@@ -23,24 +23,26 @@ class UserController extends Controller
     {
     $user = Auth::user();
     $bank = Bank::find($id);
-    $user->langganan = "Bank Malioboro";
+    $namabank = $bank->nama_bank;
+    $user->langganan = $namabank;
     $user->save();
     return redirect('/warlokkmebali');
     }
 
-    public function langganansagan()
-    {
-    $user = Auth::user();
-    $user->langganan = "Bank Sagan";
-    $user->save();
-    return redirect('/warlokkmebali');
-    }
+    // public function langganansagan()
+    // {
+    // $user = Auth::user();
+    // $user->langganan = "Bank Sagan";
+    // $user->save();
+    // return redirect('/warlokkmebali');
+    // }
 
     public function warlokkmebali()
     {
     $nama = Auth::user()->name;
     $langganan = Auth::user()->langganan;
-    return view('/warlok/dashboard' , ['key' => 'nama' ,'nama' => $nama , 'langganan' => $langganan]);
+    $bank = Bank::all();
+    return view('/warlok/dashboard' , ['key' => 'nama' ,'nama' => $nama , 'langganan' => $langganan , 'bank' => $bank]);
 
     }
 

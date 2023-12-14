@@ -28,9 +28,11 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/warlok', 'App\Http\Controllers\PageController@warlok')->middleware('useraccess:wargalokal');
     Route::post('/langgananmalioboro', 'App\Http\Controllers\UserController@langgananmalioboro')->middleware('useraccess:wargalokal');
     Route::post('/langganansagan', 'App\Http\Controllers\UserController@langganansagan')->middleware('useraccess:wargalokal');
+    Route::post('/langganan/{id}', 'App\Http\Controllers\UserController@langganan')->middleware('useraccess:wargalokal');
     Route::get('/kirimsampah', 'App\Http\Controllers\PageController@kirimsampah')->middleware('useraccess:wargalokal');
     Route::get('/riwayatkirim', 'App\Http\Controllers\PageController@riwayatkirim')->middleware('useraccess:wargalokal');
     Route::post('/simpantransaksi', 'App\Http\Controllers\PageController@simpantransaksi')->middleware('useraccess:wargalokal');
+    Route::get('/lakukanpembayaran/{id}', 'App\Http\Controllers\PageController@lakukanpembayaran')->middleware('useraccess:wargalokal');
     Route::get('/warlokkmebali', 'App\Http\Controllers\UserController@warlokkmebali')->middleware('useraccess:wargalokal');
     Route::get('/pengantar', 'App\Http\Controllers\PageController@pengantar')->middleware('useraccess:pengantar');
     Route::get('/pemilik', 'App\Http\Controllers\PageController@pemilik')->middleware('useraccess:pemilikbank');

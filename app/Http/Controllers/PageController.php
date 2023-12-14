@@ -20,7 +20,7 @@ class PageController extends Controller
         $nama = Auth::user()->name;
         $langganan = Auth::user()->langganan;
         $bank = Bank::all();
-        return view('/warlok/dashboard', ['key' => 'nama', 'nama' => $nama, 'langganan' => $langganan , 'bank' => $bank]);
+        return view('/warlok/dashboard', ['key' => 'nama', 'nama' => $nama, 'langganan' => $langganan, 'bank' => $bank]);
     }
     function pengantar()
     {
@@ -38,7 +38,12 @@ class PageController extends Controller
         $nama = Auth::user()->name;
         $alamat = Auth::user()->alamat;
         $langganan = Auth::user()->langganan;
-        return view('/warlok/kirimsampah', ['key' => 'users', 'nama' => $nama, 'alamat' => $alamat, 'langganan' => $langganan, 'pengantar' => $pengantar]);
+        $bank = Bank::where('nama_bank', $langganan)->first();
+
+        if ($bank) {
+            $harga = $bank->harga_sampah;
+        }
+        return view('/warlok/kirimsampah', ['key' => 'users', 'nama' => $nama, 'alamat' => $alamat, 'langganan' => $langganan, 'pengantar' => $pengantar, 'harga' => $harga]);
     }
     public function simpantransaksi(Request $request)
     {
@@ -47,7 +52,14 @@ class PageController extends Controller
 
         Transaksis::create($input);
 
-        return redirect('/warlokkmebali');
+        $nama = Auth::user()->name;
+        $user = Users::where('name',$nama)->first();
+        $user->tagihan = $user->tagihan + $request->tagihan;
+        $user->save();
+
+        $transaksis = Transaksis::where('nama_pengirim', $nama)->paginate(5);
+
+        return redirect('/riwayatkirim');
 
     }
 
@@ -75,7 +87,7 @@ class PageController extends Controller
         $bank = Bank::find($id);
         $bank2 = Bank::all();
         $pemilik = Auth::user()->name;
-        return view('/pemilik/editbanksampah', ['key' => 'pemilik', 'pemilik' => $pemilik, 'bank' => $bank , 'bank2' => $bank2 ]);
+        return view('/pemilik/editbanksampah', ['key' => 'pemilik', 'pemilik' => $pemilik, 'bank' => $bank, 'bank2' => $bank2]);
     }
     function saveeditbanksampah($id, Request $request)
     {
@@ -104,9 +116,10 @@ class PageController extends Controller
         // return dd($mhs);
         return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
-    public function terimatransaksi($id, Request $request){
+    public function terimatransaksi($id, Request $request)
+    {
         $transaksi = Transaksis::find($id);
-        $transaksi->status = "Diterima";
+        $transaksi->status = "Belum Dibayar";
         $transaksi->save();
 
         $langganan = Auth::user()->langganan;
@@ -114,7 +127,26 @@ class PageController extends Controller
         // return dd($mhs);
         return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
-    public function tolaktransaksi($id, Request $request){
+    public function lakukanpembayaran($id, Request $request)
+    {
+        $transaksi = Transaksis::find($id);
+        $transaksi->status = "Dibayar";
+        $transaksi->save();
+
+        $nama = Auth::user()->name;
+
+        $user = Users::where('name',$nama)->first();
+        $user->tagihan = $user->tagihan - $transaksi->tagihan;
+        $user->save();
+
+        
+        $transaksis = Transaksis::where('nama_pengirim', $nama)->paginate(5);
+
+        // return dd($mhs);
+        return view('/warlok/riwayatkirim', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+    }
+    public function tolaktransaksi($id, Request $request)
+    {
         $transaksi = Transaksis::find($id);
         $transaksi->status = "Ditolak";
         $transaksi->save();
@@ -124,22 +156,23 @@ class PageController extends Controller
         // return dd($mhs);
         return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
-    public function selesaitransaksi($id, Request $request){
+    public function selesaitransaksi($id, Request $request)
+    {
         $transaksi = Transaksis::find($id);
         $transaksi->status = "Diselesaikan";
         $transaksi->save();
 
         $langganan = Auth::user()->langganan;
         $transaksis = Transaksis::where('tujuan_bank', $langganan)->paginate(5);
-        if( $transaksi){
+        if ($transaksi) {
             $namabank = $transaksi->tujuan_bank;
             $namapengirim = $transaksi->nama_pengirim;
         }
         // return dd($mhs);
 
         $bank = Bank::where('nama_bank', $namabank)->first();
-        if ($bank){
-            if($bank->status == 'kosong'){
+        if ($bank) {
+            if ($bank->status == 'kosong') {
                 $bank->status = 'terisi';
             }
             $bank->jumlah_sampah = $bank->jumlah_sampah + $transaksi->berat_sampah;
@@ -147,7 +180,7 @@ class PageController extends Controller
             $user = Users::where('name', $namapengirim)->first();
             $bank->save();
         }
-        
+
         return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
 }

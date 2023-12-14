@@ -1,4 +1,8 @@
+<head>
 
+
+
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
 <style>
      /* ===============================Dashboard Warlok================================================== */
      @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
@@ -128,6 +132,9 @@
      
 </style>
 
+
+</head>
+
      <body>
      <div class="wrapper">
           <div class="sidebar">
@@ -137,6 +144,7 @@
                <li><a href="http://127.0.0.1:8000/kirimsampah"> Kirim Sampah </a></li>
                <li><a href="http://127.0.0.1:8000/riwayatkirim"> Riwayat Pengiriman </a></li>
                <li><a href="http://127.0.0.1:8000/iuran"> Pembayaran Iuran </a></li>
-               <li><a href="http://127.0.0.1:8000/logout"> Log Out </a></li>
+               <li><a href="http://127.0.0.1:8000/logout"> Keluar </a></li>
           </div>
+          <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
      </body>

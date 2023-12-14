@@ -18,7 +18,7 @@ class Transaksis extends Authenticatable
      */
      protected $table = 'transaksis';
      protected $fillable = [
-        'nama_pengirim', 'alamat_pengirim','tujuan_bank','jenis_sampah','berat_sampah', 'status','cara_pengantaran','nama_pengantar'
+        'nama_pengirim', 'alamat_pengirim','tujuan_bank','jenis_sampah','berat_sampah', 'status','cara_pengantaran','nama_pengantar','tagihan', 'tanggal_diantar',
     ];
 
     /**

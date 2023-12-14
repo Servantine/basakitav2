@@ -54,7 +54,12 @@
                                 <td>{{ $u->cara_pengantaran }}</td>
                                 <td>{{ $u->nama_pengantar }}</td>
                                 <td>
-                                    @if ($u->status == 'menunggu')
+                                    @if ($u->status == 'Belum Dibayar')
+                                        <div class="alert alert-danger" role="alert">
+                                            Belum Dibayar
+                                        </div>
+                                    @endif
+                                    @if ($u->status == 'Menunggu')
                                         <div class="alert alert-warning" role="alert">
                                             Menunggu
                                         </div>
@@ -74,17 +79,23 @@
                                             Diselesaikan
                                         </div>
                                     @endif
+                                    @if ($u->status == 'Dibayar')
+                                    <div class="alert alert-success" role="alert">
+                                        Dibayar
+                                    </div>
+                                @endif
                                 </td>
                                 <td>
-                                    <a href="/terimatransaksi/{{ $u->id }}" class="btn btn-success"
-                                        method="POST">
-                                        Terima </a>
-                                    <a href="/tolaktransaksi/{{ $u->id }}" class="btn btn-danger" method="POST"
-                                        onclick="return confirm('Apakah Anda Yakin?')">
-                                        Tolak </a>
-                                    <a href="/selesaitransaksi/{{ $u->id }}" class="btn btn-info" method="POST"
-                                        onclick="return confirm('Apakah Anda Yakin?')">
-                                        Selesai </a>
+                                    <a href="/terimatransaksi/{{ $u->id }}"> <button class="btn btn-success" 
+                                        @if ($u->status == 'Dibayar') disabled @endif method="POST"> Terima
+                                    </button> </a>
+                                    <a href="/tolaktransaksi/{{ $u->id }}"> <button class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin?')"
+                                        @if ($u->status == 'Dibayar') disabled @endif method="POST"> Tolak
+                                    </button> </a>
+                                    <a href="/selesaitransaksi/{{ $u->id }}"> <button class="btn btn-info" onclick="return confirm('Apakah Anda Yakin?')"
+                                        @if ($u->status == 'Diselesaikan') disabled @endif method="POST"> Selesai
+                                    </button> </a>
+
                                 </td>
                             </tr>
                         @endforeach

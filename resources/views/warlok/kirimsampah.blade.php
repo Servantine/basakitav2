@@ -33,8 +33,11 @@
             @endif
             <div class="content">
                 <div class="form-control">
-                    <form action="/simpantransaksi" method="POST">
+                    <form action="/simpantransaksi" method="POST" id="formsampah">
                         @csrf
+                        <br>
+                        <h2> Detail Sampah </h2>
+                        <br>
                         <b> Nama Pengirim </b>
                         <br>
                         <br>
@@ -62,16 +65,38 @@
                         <select class="form-control" name="jenis_sampah" required>
                             <option value="oraganik"> Organik </option>
                             <option value="nonoraganik"> Non Organik </option>
-                            <option value="kertas"> Kertas </option>
-                            <option value="kaca"> Kaca </option>
                         </select>
                         <br>
                         <br>
-                        <b> Berat sampah </b>
+                        <b> Berat Sampah </b>
                         <br>
                         <br>
-                        <input type="number" class="form-control" name="berat_sampah" required>
+                        <input type="number" class="form-control" id="berat" name="berat_sampah" required>
                         <p>/kg</p>
+                        <br>
+                        <br>
+                        <b> Harga Sampah </b>
+                        <br>
+                        <br>
+                        <input type="number" class="form-control" id="harga" value="{{ $harga }}" readonly>
+                        <p>/kg</p>
+                        <br>
+                        <br>
+                        <b> Total Tagihan </b>
+                        <br>
+                        <br>
+                        <input type="number" class="form-control" id="tagihan" name="tagihan" value="result" readonly required>
+                        <br>
+                        <br>
+                        <button type="button" class="btn btn-info" onclick="calculate()"> Hitung </button>
+                        <br>
+                        <br>
+                        <br>
+                        <h2> Detail Pengantaran </h2>
+                        <br>
+                        <b> Tanggal Pengantaran </b>
+                        <br>
+                        <input type="date" class="form-control" name="tanggal_diantar" required>
                         <br>
                         <br>
                         <b> Cara Pengantaran </b>
@@ -109,4 +134,15 @@
 
 </body>
 
+<script>
+    function calculate(){
+        var value1 = parseFloat(document.getElementById('berat').value);
+        var value2 = parseFloat(document.getElementById('harga').value);
+
+        var result = value1 * value2;
+
+        var form = document.getElementById('formsampah');
+        form.elements['tagihan'].value = result;
+    }
+</script>
 </html>

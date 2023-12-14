@@ -20,9 +20,11 @@ class CreateTransaksisTable extends Migration
             $table->string('tujuan_bank');
             $table->string('jenis_sampah');
             $table->string('berat_sampah');
-            $table->string('status')->default('menunggu');
+            $table->date('tanggal_diantar');
+            $table->string('status')->default('Menunggu');
             $table->enum('cara_pengantaran',['antar sendiri','diantarkan'])->default('diantarkan');
-            $table->string('nama_pengantar');
+            $table->string('nama_pengantar')->default('Sendiri');
+            $table->integer('tagihan');
             $table->timestamps();
         });
     }
