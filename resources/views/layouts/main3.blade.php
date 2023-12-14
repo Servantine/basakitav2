@@ -137,10 +137,11 @@
           <div class="sidebar">
               <h2>BASAKITA</h2>
               <ul>
-               <li><a href="http://127.0.0.1:8000/dashboard"> Home </a></li>
-               <li><a href="http://127.0.0.1:8000/permintaanantar"> Permintaan Pengantaran </a></li>
-               <li><a href="http://127.0.0.1:8000/riwayatpengantaran"> Riwayat Pengantaran </a></li>
-               <li><a href="#"> Penerimaan Gaji </a></li>
+               <li><a href="/pengantar"> Home </a></li>
+               <li><a href="/kelolakendaraan"> Kelola Kendaraan </a></li>
+               <li><a href="/banksampahsemua"> List Bank Sampah </a></li>
+               <li><a href="/luaranpengantar"> Luaran Pengantar </a></li>
+               <li> <a href="/logout"> Keluar </li></a>
           </div>
           <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
      </body>

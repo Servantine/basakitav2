@@ -1,4 +1,4 @@
-@include('layouts.main4')
+@include('layouts.main3')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,23 +26,18 @@
     <div class="main_content">
         <div class="header"> Selamat Datang </div>
         <div class="info">
-            @if($jumlah_sampah >= $kapasitas_sampah)
-            <div class="alert alert-danger" role="alert">
-               BANK KAMU PENUH. KAMU TIDAK DAPAT MENERIMA SAMPAH
-           </div>
-           @endif
             <div class="content">
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">No</th>
+                            <th scope="col">Nama Pengantar</th>
                             <th scope="col">Tujuan Bank </th>
                             <th scope="col">Nama Pengirim</th>
                             <th scope="col">Alamat Pengirim</th>
                             <th scope="col">Jenis Sampah</th>
                             <th scope="col">Berat Sampah</th>
                             <th scope="col">Cara Pengantaran</th>
-                            <th scope="col">Nama Pengantar</th>
                             <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
@@ -51,13 +46,13 @@
                         @foreach ($transaksi as $no => $u)
                             <tr>
                                 <th scope="row">{{ $transaksi->firstitem() + $no }}</th>
+                                <td>{{ $u->nama_pengantar }}</td>
                                 <td>{{ $u->tujuan_bank }}</td>
                                 <td>{{ $u->nama_pengirim }}</td>
                                 <td>{{ $u->alamat_pengirim }}</td>
                                 <td>{{ $u->jenis_sampah }}</td>
                                 <td>{{ $u->berat_sampah }} KG</td>
                                 <td>{{ $u->cara_pengantaran }}</td>
-                                <td>{{ $u->nama_pengantar }}</td>
                                 <td>
                                     @if ($u->status == 'Belum Dibayar')
                                         <div class="alert alert-danger" role="alert">
@@ -96,14 +91,14 @@
                                 @endif
                                 </td>
                                 <td>
-                                    <a href="/terimatransaksi/{{ $u->id }}"> <button class="btn btn-success" 
-                                        @if ($u->status == 'Dibayar' || $jumlah_sampah >= $kapasitas_sampah) disabled @endif method="POST"> Terima
+                                    <a href="/antartransaksi/{{ $u->id }}"> <button class="btn btn-warning" 
+                                        @if ($u->status != 'Dibayar') disabled @endif method="POST"> Antar
                                     </button> </a>
                                     <a href="/tolaktransaksi/{{ $u->id }}"> <button class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin?')"
-                                        @if ($u->status == 'Dibayar') disabled @endif method="POST"> Tolak
+                                        @if ($u->status == 'Ditolak' || $u->status == 'Diantarkan') disabled @endif method="POST"> Tolak
                                     </button> </a>
-                                    <a href="/selesaitransaksi/{{ $u->id }}"> <button class="btn btn-info" onclick="return confirm('Apakah Anda Yakin?')"
-                                        @if ($u->status == 'Diselesaikan' || $jumlah_sampah >= $kapasitas_sampah) disabled @endif method="POST"> Selesai
+                                    <a href="/selesaitransaksi2/{{ $u->id }}"> <button class="btn btn-info" onclick="return confirm('Apakah Anda Yakin?')"
+                                        @if ($u->status == 'Diselesaikan' || $u->status == 'Ditolak') disabled @endif method="POST"> Selesai
                                     </button> </a>
 
                                 </td>

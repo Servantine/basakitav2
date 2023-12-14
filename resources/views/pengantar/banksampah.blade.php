@@ -1,4 +1,4 @@
-@include('layouts.main2')
+@include('layouts.main3')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,94 +23,12 @@
         </div>
     @endif --}}
 
-
     <div class="main_content">
-        <div class="header"> Selamat Datang <b> {{ $nama }} </b></div>
+        <div class="header"> Selamat Datang </div>
         <div class="info">
             <div class="content">
-                @if ($langganan == 'null')
-                    <div class="alert alert-danger" role="alert">
-                        <b> KAMU HARUS BERLANGGANAN DAHULU DI SALAH 1 BANK SAMPAH </b>
-                    </div>
-                @endif
-                @if ($langganan == 'Bank Malioboro' || $langganan == 'Bank Sagan' || $langganan == 'Bank Central')
-                    <div class="alert alert-info" role="alert">
-                        Kamu telah berlangganan pada <b> {{ $langganan }} </b>
-                    </div>
-                @endif
-                <div class="row">
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card card-stats mb-4 mb-xl-0">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Total Iuran belum
-                                            Dibayar</h5>
-                                        <span class="h2 font-weight-bold mb-0"> 123 </span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                            <i class="fas fa-chart-bar"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card card-stats mb-4 mb-xl-0">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Transaksi Dilakukan
-                                        </h5>
-                                        <span class="h2 font-weight-bold mb-0">2,356</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                            <i class="fas fa-chart-pie"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card card-stats mb-4 mb-xl-0">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Lokasi Bank Sampah
-                                        </h5>
-                                        <span class="h2 font-weight-bold mb-0">924</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                                            <i class="fas fa-users"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6">
-                        <div class="card card-stats mb-4 mb-xl-0">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0">Sampah disimpan</h5>
-                                        <span class="h2 font-weight-bold mb-0">49,65%</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                            <i class="fas fa-percent"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h3> Daftar Bank Sampah Yang Tersedia</h3>
+                <br>
                 <center>
                     <div id='map' style='width: 900px; height: 500px;'></div>
                     <script>
@@ -172,27 +90,37 @@
                                 ]
                             }
 
-                        const loadLocations = ()=> {
+                        const loadLocations = () => {
                             geoJson.features.forEach((location) => {
-                                const {geometry, properties} = location 
-                                const {iconSize, locationId, title, image, description} = properties
+                                const {
+                                    geometry,
+                                    properties
+                                } = location
+                                const {
+                                    iconSize,
+                                    locationId,
+                                    title,
+                                    image,
+                                    description
+                                } = properties
 
                                 let markerElement = document.createElement('div')
                                 markerElement.className = 'marker' + locationId
                                 markerElement.id = locationId
-                                markerElement.style.backgroundImage = 'url(https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png)'
+                                markerElement.style.backgroundImage =
+                                    'url(https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png)'
                                 markerElement.style.backgroundSize = 'cover'
                                 markerElement.style.width = '50px'
                                 markerElement.style.height = '50px'
 
                                 const popUp = new mapboxgl.Popup({
-                                    offset:25
-                                }).setHTML(title).setMaxWidth("400px")
+                                    offset: 25
+                                }).setHTML(title).setMaxWidth("500px")
 
                                 new mapboxgl.Marker(markerElement)
-                                .setLngLat(geometry.coordinates)
-                                .setPopup(popUp)
-                                .addTo(map)
+                                    .setLngLat(geometry.coordinates)
+                                    .setPopup(popUp)
+                                    .addTo(map)
                             });
                         }
 
@@ -219,10 +147,10 @@
                             });
                         })
                     </script>
-
                 </center>
                 <div class="row">
                     <div class="card-group">
+                        <br>
                         @foreach ($bank as $item)
                             <div class="card">
                                 <img src="https://sibaku.kulonprogokab.go.id/assets_frontend/img/diet-sampah-removebg.png"
@@ -242,16 +170,8 @@
 
                     </div>
                 </div>
-
-
             </div>
-
         </div>
-    </div>
-
-    </div>
-    </div>
-
     </div>
 
 </body>

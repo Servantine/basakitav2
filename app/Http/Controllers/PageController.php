@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Users;
 use App\Models\Bank;
+use App\Models\Kendaraan;
+use Illuminate\Support\Facades\DB;
+use PDF;
 
 class PageController extends Controller
 {
@@ -53,7 +56,7 @@ class PageController extends Controller
         Transaksis::create($input);
 
         $nama = Auth::user()->name;
-        $user = Users::where('name',$nama)->first();
+        $user = Users::where('name', $nama)->first();
         $user->tagihan = $user->tagihan + $request->tagihan;
         $user->save();
 
@@ -70,6 +73,7 @@ class PageController extends Controller
         // return dd($mhs);
         return view('/warlok/riwayatkirim', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
+
     function kelolabanksampah()
     {
         $pemilik = Auth::user()->name;
@@ -111,10 +115,14 @@ class PageController extends Controller
 
     function permintaansampah()
     {
+        $nama = Auth::user()->name;
         $langganan = Auth::user()->langganan;
+        $bank = Bank::where('nama_pemilik', $nama)->first();
+        $jumlahsampah = $bank->jumlah_sampah;
+        $kapasitassampah = $bank->kapasitas_sampah;
         $transaksis = Transaksis::where('tujuan_bank', $langganan)->paginate(5);
         // return dd($mhs);
-        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+        return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis, 'jumlah_sampah' => $jumlahsampah , 'kapasitas_sampah' => $kapasitassampah]);
     }
     public function terimatransaksi($id, Request $request)
     {
@@ -135,11 +143,11 @@ class PageController extends Controller
 
         $nama = Auth::user()->name;
 
-        $user = Users::where('name',$nama)->first();
+        $user = Users::where('name', $nama)->first();
         $user->tagihan = $user->tagihan - $transaksi->tagihan;
         $user->save();
 
-        
+
         $transaksis = Transaksis::where('nama_pengirim', $nama)->paginate(5);
 
         // return dd($mhs);
@@ -183,4 +191,148 @@ class PageController extends Controller
 
         return view('/pemilik/permintaansampah', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
+
+    function kelolakendaraan()
+    {
+        $pengantar = Auth::user()->name;
+        $kendaraan = Kendaraan::where('pemilik_kendaraan', $pengantar)->paginate(2);
+        // return dd($mhs);
+        return view('/pengantar/kelolakendaraan', ['key' => 'kendaraan', 'kendaraan' => $kendaraan]);
+    }
+
+    function buatkendaraan()
+    {
+        $pemilik = Auth::user()->name;
+        return view('/pengantar/buatkendaraan', ['key' => 'pemilik', 'pemilik' => $pemilik]);
+    }
+
+    public function simpankendaraan(Request $request)
+    {
+        $input = $request->all();
+
+        $user = Auth::user();
+        Kendaraan::create($input);
+
+        return redirect('/pengantarkembali');
+
+    }
+    public function banksampahsemua(Request $request)
+    {
+        $nama = Auth::user()->name;
+        $bank = Bank::all();
+
+        return view('/pengantar/banksampah', ['key' => 'bank', 'bank' => $bank]);
+
+    }
+    public function lihatpesanan($id, Request $request)
+    {
+        $user = Auth::user();
+        $bank = Bank::find($id);
+        $namabank = $bank->nama_bank;
+        $nama = Auth::user()->name;
+
+        if ($namabank == 'Bank Malioboro') {
+            return redirect('/bankmalioboro');
+        }
+        if ($namabank == 'Bank Sagan') {
+            return redirect('/banksagan');
+        }
+    }
+
+    function bankmalioboro()
+    {
+        $pengantar = Auth::user()->name;
+        $transaksis = DB::table('transaksis')
+        ->where('nama_pengantar', $pengantar)
+        ->paginate(5);
+        return view('/pengantar/antarpesananmalioboro', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+    }
+    function banksagan()
+    {
+        $pengantar = Auth::user()->name;
+        $transaksis = DB::table('transaksis')
+        ->where('tujuan_bank', 'Bank Sagan')
+        ->where('nama_pengantar', $pengantar)
+        ->paginate(5);
+        return view('/pengantar/antarpesananmalioboro', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+    }
+    public function antartransaksi($id, Request $request)
+    {
+        $pengantar = Auth::user()->name;
+        $transaksi = Transaksis::find($id);
+        $transaksi->status = "Diantarkan";
+        $transaksi->save();
+
+        $kendaraan = Kendaraan::where('pemilik_kendaraan', $pengantar)->first();
+        $kendaraan->kapasitas_ditampung = $kendaraan->kapasitas_ditampung + $transaksi->berat_sampah;
+        $kendaraan->save();
+
+        
+        $transaksis = DB::table('transaksis')
+        ->where('tujuan_bank', 'Bank Malioboro')
+        ->where('nama_pengantar', $pengantar)
+        ->paginate(5);
+        return view('/pengantar/antarpesananmalioboro', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+    }
+
+    function downloadluaranwarlok()
+    {
+        $nama = Auth::user()->name;
+        $transaksis = Transaksis::where('nama_pengirim', $nama)->paginate(5);
+        // return dd($mhs);
+        $pdf = PDF::loadView('/warlok/downloadpdfori', ['transaksi' => $transaksis]);
+
+        return $pdf->download('table_result.pdf');
+
+        // return view('/warlok/luaran', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+    }
+
+    public function download1bulanyanglalu()
+{
+    $startDate = '2023-11-14';
+    $endDate = '2023-12-14';
+    $transaksis = Transaksis::whereBetween('tanggal_diantar', [$startDate, $endDate])->paginate(10);
+
+    $pdf = PDF::loadView('/warlok/downloadpdfori', ['transaksi' => $transaksis]);
+
+    return $pdf->download('onemonth.pdf');
+}
+public function download1tahunyanglalu()
+{
+    $startDate = '2022-12-14';
+    $endDate = '2023-12-14';
+    $transaksis = Transaksis::whereBetween('tanggal_diantar', [$startDate, $endDate])->paginate(10);
+
+    $pdf = PDF::loadView('/warlok/downloadpdfori', ['transaksi' => $transaksis]);
+
+    return $pdf->download('oneyear.pdf');
+}
+    function luaranwarlok()
+    {
+        $nama = Auth::user()->name;
+        $transaksis = Transaksis::where('nama_pengirim', $nama)->paginate(5);
+
+        $data = Transaksis::select('jenis_sampah', DB::raw('count(*) as total'))
+                    ->groupBy('jenis_sampah')
+                    ->get();
+
+        // return dd($mhs);
+        return view('/warlok/luaran', ['key' => 'transaksis', 'transaksi' => $transaksis, 'data' => $data]);
+    }
+    function luaranpengantar()
+    {
+        $pengantar = Auth::user()->name;
+        $transaksis = DB::table('transaksis')
+        ->where('nama_pengantar', $pengantar)
+        ->paginate(5);
+
+        $data = Transaksis::select('nama_pengirim', DB::raw('count(*) as total'))
+                    ->where('nama_pengantar', $pengantar)
+                    ->groupBy('nama_pengantar')
+                    ->get();
+
+        // return dd($mhs);
+        return view('/pengantar/luaran', ['key' => 'transaksis', 'transaksi' => $transaksis, 'data' => $data]);
+    }
+
 }

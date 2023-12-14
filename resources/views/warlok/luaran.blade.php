@@ -27,6 +27,16 @@
         <div class="header"> Selamat Datang </div>
         <div class="info">
             <div class="content">
+
+               
+               <center>
+                    <h3> GRAFIK PERBANDINGAN ORGANIK DAN ANORGANIK</h3>
+                    <div style="width:80%;">
+                         <canvas id="wasteChart"></canvas>
+                     </div>
+               </center>
+               <a href="/download1bulanyanglalu"><button class="btn btn-info">1 Bulan yang Lalu</button></a>
+               <a href="/download1tahunyanglalu"><button class="btn btn-info">1 Tahun yang Lalu</button></a>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -40,7 +50,6 @@
                             <th scope="col">Nama Pengantar</th>
                             <th scope="col">Tagihan</th>
                             <th scope="col">Status</th>
-                            <th scope="col"> Aksi </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,52 +65,47 @@
                                 <td>{{ $u->nama_pengantar }}</td>
                                 <td> Rp {{ $u->tagihan }}</td>
                                 <td>
-                                    @if ($u->status == 'Belum Dibayar')
-                                        <div class="alert alert-danger" role="alert">
-                                            Belum Dibayar
-                                        </div>
-                                    @endif
-                                    @if ($u->status == 'Diantarkan')
-                                        <div class="alert alert-warning" role="alert">
-                                            Diantar
-                                        </div>
-                                    @endif
-                                    @if ($u->status == 'Menunggu')
-                                        <div class="alert alert-warning" role="alert">
-                                            Menunggu
-                                        </div>
-                                    @endif
-                                    @if ($u->status == 'Diterima')
-                                        <div class="alert alert-success" role="alert">
-                                            Diterima
-                                        </div>
-                                    @endif
-                                    @if ($u->status == 'Ditolak')
-                                        <div class="alert alert-danger" role="alert">
-                                            Ditolak
-                                        </div>
-                                    @endif
-                                    @if ($u->status == 'Diselesaikan')
-                                        <div class="alert alert-info" role="alert">
-                                            Diselesaikan
-                                        </div>
-                                    @endif
-                                    @if ($u->status == 'Dibayar')
-                                    <div class="alert alert-success" role="alert">
-                                        Dibayar
-                                    </div>
-                                @endif
-                                </td>
-                                <td>
-                                    <a href="/lakukanpembayaran/{{ $u->id }}"> <button class="btn btn-info"
-                                            @if ($u->status !== 'Belum Dibayar') disabled @endif method="POST"> Bayar
-                                        </button> </a>
-
+                                   @if ($u->status == 'Belum Dibayar')
+                                   <div class="alert alert-danger" role="alert">
+                                       Belum Dibayar
+                                   </div>
+                               @endif
+                               @if ($u->status == 'Diantarkan')
+                                   <div class="alert alert-warning" role="alert">
+                                       Diantar
+                                   </div>
+                               @endif
+                               @if ($u->status == 'Menunggu')
+                                   <div class="alert alert-warning" role="alert">
+                                       Menunggu
+                                   </div>
+                               @endif
+                               @if ($u->status == 'Diterima')
+                                   <div class="alert alert-success" role="alert">
+                                       Diterima
+                                   </div>
+                               @endif
+                               @if ($u->status == 'Ditolak')
+                                   <div class="alert alert-danger" role="alert">
+                                       Ditolak
+                                   </div>
+                               @endif
+                               @if ($u->status == 'Diselesaikan')
+                                   <div class="alert alert-info" role="alert">
+                                       Diselesaikan
+                                   </div>
+                               @endif
+                               @if ($u->status == 'Dibayar')
+                               <div class="alert alert-success" role="alert">
+                                   Dibayar
+                               </div>
+                           @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <a href="/downloadluaranwarlok"><button class="btn btn-info">Download Laporan</button></a>
                 {{-- <div id="modalDetail" style="display: none;" tabindex="-1" role="dialog"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -128,6 +132,46 @@
     </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+     var ctx = document.getElementById('wasteChart').getContext('2d');
+     var data = @json($data);
+
+     var labels = data.map(function(item) {
+         return item.jenis_sampah;
+     });
+
+     var values = data.map(function(item) {
+         return item.total;
+     });
+
+     var chart = new Chart(ctx, {
+         type: 'bar',
+         data: {
+             labels: labels,
+             datasets: [{
+                 label: 'Waste Count',
+                 data: values,
+                 backgroundColor: [
+                     'rgba(75, 192, 192, 0.2)',
+                     'rgba(255, 99, 132, 0.2)',
+                 ],
+                 borderColor: [
+                     'rgba(75, 192, 192, 1)',
+                     'rgba(255, 99, 132, 1)',
+                 ],
+                 borderWidth: 1
+             }]
+         },
+         options: {
+             scales: {
+                 y: {
+                     beginAtZero: true
+                 }
+             }
+         }
+     });
+ </script>
 
 </body>
 
