@@ -94,7 +94,7 @@
                                     <a href="/antartransaksi/{{ $u->id }}"> <button class="btn btn-warning" 
                                         @if ($u->status != 'Dibayar') disabled @endif method="POST"> Antar
                                     </button> </a>
-                                    <a href="/tolaktransaksi/{{ $u->id }}"> <button class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin?')"
+                                    <a href="/tolaktransaksi2/{{ $u->id }}"> <button class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin?')"
                                         @if ($u->status == 'Ditolak' || $u->status == 'Diantarkan') disabled @endif method="POST"> Tolak
                                     </button> </a>
                                     <a href="/selesaitransaksi2/{{ $u->id }}"> <button class="btn btn-info" onclick="return confirm('Apakah Anda Yakin?')"

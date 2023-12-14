@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/simpankendaraan', 'App\Http\Controllers\PageController@simpankendaraan')->middleware('useraccess:pengantar');
     Route::get('/pengantarkembali', 'App\Http\Controllers\PageController@kelolakendaraan')->middleware('useraccess:pengantar');
     Route::get('/banksampahsemua', 'App\Http\Controllers\PageController@banksampahsemua')->middleware('useraccess:pengantar');
-    Route::get('/tolaktransaksi/{id}', 'App\Http\Controllers\PageController@tolaktransaksi');
+    Route::get('/tolaktransaksi2/{id}', 'App\Http\Controllers\PageController@tolaktransaksi2');
     Route::get('/lihatpesanan/{id}', 'App\Http\Controllers\PageController@lihatpesanan')->middleware('useraccess:pengantar');
     Route::get('/bankmalioboro', 'App\Http\Controllers\PageController@bankmalioboro')->middleware('useraccess:pengantar');
     Route::get('/banksagan', 'App\Http\Controllers\PageController@banksagan')->middleware('useraccess:pengantar');

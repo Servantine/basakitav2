@@ -287,6 +287,25 @@ class PageController extends Controller
         return view('/pengantar/antarpesananmalioboro', ['key' => 'transaksis', 'transaksi' => $transaksis]);
     }
 
+    public function tolaktransaksi2($id, Request $request)
+    {
+        $pengantar = Auth::user()->name;
+        $transaksi = Transaksis::find($id);
+        $transaksi->status = "Ditolak";
+        $transaksi->save();
+
+        $kendaraan = Kendaraan::where('pemilik_kendaraan', $pengantar)->first();
+        $kendaraan->kapasitas_ditampung = $kendaraan->kapasitas_ditampung + $transaksi->berat_sampah;
+        $kendaraan->save();
+
+        
+        $transaksis = DB::table('transaksis')
+        ->where('tujuan_bank', 'Bank Malioboro')
+        ->where('nama_pengantar', $pengantar)
+        ->paginate(5);
+        return view('/pengantar/antarpesananmalioboro', ['key' => 'transaksis', 'transaksi' => $transaksis]);
+    }
+
     function downloadluaranwarlok()
     {
         $nama = Auth::user()->name;
