@@ -46,12 +46,14 @@
                                     <a href="editbanksampah/{{ $u->id }}" class="btn btn-warning"
                                         method="POST">
                                         Edit</a>
+                                    <a href="/prosessampah/{{ $u->id }}"> <button class="btn btn-info"> Prosess </button> </a>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <a href="/buatbanksampah"> <button class="btn btn-info" @if($bank->firstitem() >= 1) disabled @endif> Buat Baru</button> </a>
+                
                 
             </div>
         </div>

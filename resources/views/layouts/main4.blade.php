@@ -133,11 +133,10 @@
           <div class="sidebar">
               <h2>BASAKITA</h2>
               <ul>
-               <a href="http://127.0.0.1:8000/pemilik"> <li> Home </li> </a>
-               <a href="http://127.0.0.1:8000/kelolabanksampah"> <li> Kelola Bank Sampah </li></a>
-               <a href="http://127.0.0.1:8000/permintaansampah"> <li> Permintaan Sampah </li></a>
-               <a href="http://127.0.0.1:8000/riwayatmasuk"> <li> Riwayat Pengantaran </li></a>
-               <a href="#"><li> Luaran </li></a>
-               <a href="http://127.0.0.1:8000/logout"><li> Keluar </li></a>
+               <li> <a href="/pemilik">  Home  </a> </li>
+               <li> <a href="/kelolabanksampah">  Kelola Bank Sampah </a></li>
+               <li> <a href="/permintaansampah">  Permintaan Sampah </a></li>
+               <li><a href="/luaranpemilik"> Luaran </a></li>
+               <li><a href="/logout"> Keluar </a></li>
           </div>
      </body>

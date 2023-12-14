@@ -231,9 +231,9 @@
                                     <h5 class="card-title"> {{ $item->nama_bank }} </h5>
                                     <p class="card-text"> {{ $item->alamat_bank }} . Dengan Harga <b>
                                             {{ $item->harga_sampah }} / KG </b> . Dengan kapasitas  <b> {{  $item->kapasitas_sampah }} </b> Saat Ini menampung <b> {{ $item->jumlah_sampah }} KG Sampah</b> <br>
-                                    <form action="/lihatpesanan/{{ $item->id }}">
+                                    <form action="/langganan/{{ $item->id }}" method="POST">
                                         @csrf
-                                        <button class="btn btn-success"type="submit">Lihat Pesanan </button>
+                                        <button class="btn btn-success" type="submit">Langganan </button>
                                     </form>
                                     </p>
                                 </div>

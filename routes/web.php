@@ -60,8 +60,11 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/simpanbanksampah', 'App\Http\Controllers\PageController@simpanbanksampah')->middleware('useraccess:pemilikbank');
     Route::get('/editbanksampah/{id}', 'App\Http\Controllers\PageController@editbanksampah')->middleware('useraccess:pemilikbank');
     Route::any('/saveeditbanksampah/{id}', 'App\Http\Controllers\PageController@saveeditbanksampah')->middleware('useraccess:pemilikbank');
+    Route::any('/saveeditbanksampah2/{id}', 'App\Http\Controllers\PageController@saveeditbanksampah2')->middleware('useraccess:pemilikbank');
     Route::get('/pemilikkembali', 'App\Http\Controllers\PageController@kelolabanksampah')->middleware('useraccess:pemilikbank');
     Route::get('/permintaansampah', 'App\Http\Controllers\PageController@permintaansampah')->middleware('useraccess:pemilikbank');
+    Route::get('/luaranpemilik', 'App\Http\Controllers\PageController@luaranpemilik')->middleware('useraccess:pemilikbank');
+    Route::get('/prosessampah/{id}', 'App\Http\Controllers\PageController@prosessampah')->middleware('useraccess:pemilikbank');
     Route::get('/terimatransaksi/{id}', 'App\Http\Controllers\PageController@terimatransaksi')->middleware('useraccess:pemilikbank');
     Route::get('/tolaktransaksi/{id}', 'App\Http\Controllers\PageController@tolaktransaksi');
     Route::get('/selesaitransaksi/{id}', 'App\Http\Controllers\PageController@selesaitransaksi')->middleware('useraccess:pemilikbank');

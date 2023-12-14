@@ -1,0 +1,60 @@
+@include('layouts.main4')
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/eee4f26c1d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <div class="main_content">
+        <div class="header"> Selamat Datang </div>
+        <div class="info">
+            <div class="content">
+                <div class="form-control">
+                    <form action="/saveeditbanksampah2/{{ $bank->id }}" method="PUT" id="formsampah">
+                        @csrf
+                        <b> Jumlah Sampah </b>
+                        <br>
+                        <br>
+                        <input type="number" class="form-control" id="jumlah" name="jumlah_sampah" value="{{ $bank->jumlah_sampah }}"
+                            required>
+                        <br>
+                        <br>
+                        <b> Proses Sampah </b>
+                        <br>
+                        <br>
+                        <input type="number" class="form-control" id="proses" name="proses" value="{{ $bank->jumlah_sampah }}"
+                            required>
+                        <br>
+                        <button class="btn btn-info" type="submit">
+                            Kirim </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <script>
+     function calculate(){
+         var value1 = parseFloat(document.getElementById('jumlah').value);
+         var value2 = parseFloat(document.getElementById('proses').value);
+ 
+         var result = jumlah - proses;
+ 
+         var form = document.getElementById('formsampah');
+         form.elements['hasil'].value = result;
+     }
+ </script>
+</body>
+
+</html>

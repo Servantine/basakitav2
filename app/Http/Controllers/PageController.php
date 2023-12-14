@@ -326,13 +326,49 @@ public function download1tahunyanglalu()
         ->where('nama_pengantar', $pengantar)
         ->paginate(5);
 
-        $data = Transaksis::select('nama_pengirim', DB::raw('count(*) as total'))
-                    ->where('nama_pengantar', $pengantar)
-                    ->groupBy('nama_pengantar')
-                    ->get();
+        $data = Transaksis::select('nama_pengantar', DB::raw('count(distinct nama_pengirim) as total_senders'))
+        ->groupBy('nama_pengantar')
+        ->get();
+        
 
         // return dd($mhs);
         return view('/pengantar/luaran', ['key' => 'transaksis', 'transaksi' => $transaksis, 'data' => $data]);
+    }
+    function prosessampah($id, Request $request)
+    {
+        $bank = Bank::find($id);
+        $bank2 = Bank::all();
+        $pemilik = Auth::user()->name;
+        return view('/pemilik/prosessampah', ['key' => 'pemilik', 'pemilik' => $pemilik, 'bank' => $bank, 'bank2' => $bank2]);
+    }
+
+    function saveeditbanksampah2($id, Request $request)
+    {
+        $jumlah = $request->jumlah_sampah;
+        $proses = $request->proses;
+        $hasil = $jumlah - $proses;
+        $bank = Bank::find($id)->first();
+        $bank->jumlah_sampah = $hasil;
+        $bank->save();
+        return redirect('/pemilikkembali');
+    }
+
+    function luaranpemilik()
+    {
+        $nama = Auth::user()->name;
+        $langganan = Auth::user()->langganan;
+        $bank = Bank::where('nama_pemilik', $nama)->first();
+        $jumlahsampah = $bank->jumlah_sampah;
+        $kapasitassampah = $bank->kapasitas_sampah;
+        $transaksis = Transaksis::where('tujuan_bank', $langganan)->paginate(5);
+
+        $data = Transaksis::select('nama_pengirim', 'tujuan_bank', DB::raw('count(*) as total'))
+        ->groupBy('nama_pengirim', 'tujuan_bank')
+        ->get();
+        
+
+        // return dd($mhs);
+        return view('/pemilik/luaran', ['key' => 'transaksis', 'transaksi' => $transaksis, 'data' => $data]);
     }
 
 }

@@ -140,11 +140,11 @@
           <div class="sidebar">
               <h2>BASAKITA</h2>
               <ul>
-               <li><a href="http://127.0.0.1:8000/warlok"> Home </a></li>
-               <li><a href="http://127.0.0.1:8000/kirimsampah"> Kirim Sampah </a></li>
-               <li><a href="http://127.0.0.1:8000/riwayatkirim"> Riwayat Pengiriman </a></li>
-               <li><a href="http://127.0.0.1:8000/luaranwarlok"> Luaran Warga Lokal </a></li>
-               <li><a href="http://127.0.0.1:8000/logout"> Keluar </a></li>
+               <li><a href="/warlok"> Home </a></li>
+               <li><a href="/kirimsampah"> Kirim Sampah </a></li>
+               <li><a href="/riwayatkirim"> Riwayat Pengiriman </a></li>
+               <li><a href="/luaranwarlok"> Luaran Warga Lokal </a></li>
+               <li><a href="/logout"> Keluar </a></li>
           </div>
           <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
      </body>

@@ -11,6 +11,7 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -26,12 +27,12 @@
     <div class="main_content">
         <div class="header"> Selamat Datang </div>
         <div class="info">
-            @if($jumlah_sampah >= $kapasitas_sampah)
-            <div class="alert alert-danger" role="alert">
-               BANK KAMU PENUH. KAMU TIDAK DAPAT MENERIMA SAMPAH
-           </div>
-           @endif
             <div class="content">
+               <center>
+                    <div style="width:80%;">
+                         <canvas id="senderComparisonChart"></canvas>
+                     </div>
+               </center>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -44,7 +45,6 @@
                             <th scope="col">Cara Pengantaran</th>
                             <th scope="col">Nama Pengantar</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,18 +95,6 @@
                                     </div>
                                 @endif
                                 </td>
-                                <td>
-                                    <a href="/terimatransaksi/{{ $u->id }}"> <button class="btn btn-success" 
-                                        @if ($u->status == 'Dibayar' || $jumlah_sampah >= $kapasitas_sampah) disabled @endif method="POST"> Terima
-                                    </button> </a>
-                                    <a href="/tolaktransaksi/{{ $u->id }}"> <button class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin?')"
-                                        @if ($u->status == 'Dibayar') disabled @endif method="POST"> Tolak
-                                    </button> </a>
-                                    <a href="/selesaitransaksi/{{ $u->id }}"> <button class="btn btn-info" onclick="return confirm('Apakah Anda Yakin?')"
-                                        @if ($u->status == 'Diselesaikan' || $jumlah_sampah >= $kapasitas_sampah) disabled @endif method="POST"> Selesai
-                                    </button> </a>
-
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -117,16 +105,47 @@
 
     </div>
     <script>
-        function calculate(){
-            var value1 = parseFloat(document.getElementById('berat').value);
-            var value2 = parseFloat(document.getElementById('harga').value);
-    
-            var result = value1 * value2;
-    
-            var form = document.getElementById('formsampah');
-            form.elements['tagihan'].value = result;
-        }
-    </script>
+     var ctx = document.getElementById('senderComparisonChart').getContext('2d');
+     var data = @json($data);
+
+     var uniqueBanks = [...new Set(data.map(item => item.tujuan_bank))];
+
+     var datasets = uniqueBanks.map(bank => {
+         var bankData = data.filter(item => item.tujuan_bank === bank);
+
+         return {
+             label: bank,
+             data: bankData.map(item => item.total),
+             backgroundColor: getRandomColor(),
+             borderColor: getRandomColor(),
+             borderWidth: 1
+         };
+     });
+
+     function getRandomColor() {
+         var letters = '0123456789ABCDEF';
+         var color = '#';
+         for (var i = 0; i < 6; i++) {
+             color += letters[Math.floor(Math.random() * 16)];
+         }
+         return color;
+     }
+
+     var chart = new Chart(ctx, {
+         type: 'bar',
+         data: {
+             labels: data.map(item => item.nama_pengirim),
+             datasets: datasets
+         },
+         options: {
+             scales: {
+                 y: {
+                     beginAtZero: true
+                 }
+             }
+         }
+     });
+ </script>
 </body>
 
 </html>
